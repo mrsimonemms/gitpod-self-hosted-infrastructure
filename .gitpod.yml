@@ -1,0 +1,17 @@
+image:
+  file: .gitpod.Dockerfile
+
+tasks:
+  - name: Install Terraform
+    command: |
+      terraform init
+vscode:
+  extensions:
+    - HashiCorp.terraform
+    - EditorConfig.EditorConfig
+    - donjayamanne.githistory
+    - octref.vetur
+    - ms-vscode.makefile-tools
+ports:
+  - port: 8800
+    visibility: private
