@@ -27,7 +27,9 @@ No providers.
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_azure"></a> [azure](#module\_azure) | ./azure | n/a |
 
 ## Resources
 
@@ -37,6 +39,7 @@ No resources.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_azure_location"></a> [azure\_location](#input\_azure\_location) | n/a | `any` | n/a | yes |
 | <a name="input_cloud"></a> [cloud](#input\_cloud) | n/a | `any` | n/a | yes |
 | <a name="input_dns_enabled"></a> [dns\_enabled](#input\_dns\_enabled) | n/a | `any` | n/a | yes |
 | <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | n/a | `any` | n/a | yes |

@@ -42,7 +42,9 @@ No resources.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_azure_location"></a> [azure\_location](#input\_azure\_location) | Region to use | `string` | `"northeurope"` | no |
 | <a name="input_cloud"></a> [cloud](#input\_cloud) | The cloud provider to deploy to | `string` | n/a | yes |
+| <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | The domain name Gitpod should be installed to - if left blank, DNS is not configured | `string` | `null` | no |
 | <a name="input_enable_airgapped"></a> [enable\_airgapped](#input\_enable\_airgapped) | If supported by the cloud provider, configure a cluster isolated from the public internet | `bool` | `false` | no |
 | <a name="input_enable_external_database"></a> [enable\_external\_database](#input\_enable\_external\_database) | If supported by the cloud provider, use an external database | `bool` | `true` | no |
 | <a name="input_enable_external_registry"></a> [enable\_external\_registry](#input\_enable\_external\_registry) | If supported by the cloud provider, use an external registry | `bool` | `true` | no |

@@ -9,6 +9,12 @@ variable "cloud" {
   }
 }
 
+variable "domain_name" {
+  default     = null
+  description = "The domain name Gitpod should be installed to - if left blank, DNS is not configured"
+  type        = string
+}
+
 variable "enable_airgapped" {
   default     = false
   description = "If supported by the cloud provider, configure a cluster isolated from the public internet"

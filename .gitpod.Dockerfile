@@ -14,3 +14,5 @@ RUN git clone https://github.com/tfutils/tfenv.git /home/gitpod/.tfenv \
 # KOTS
 RUN curl https://kots.io/install | bash \
   && echo 'source <(kubectl kots completion bash)' >> /home/gitpod/.bashrc
+# Azure
+RUN curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash

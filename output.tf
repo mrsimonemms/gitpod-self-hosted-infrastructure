@@ -1,16 +1,16 @@
 output "cert_manager_issuer" {
   sensitive = true
-  value = module.infrastructure.cert_manager_issuer
+  value     = module.infrastructure.cert_manager_issuer
 }
 
 output "cert_manager_secret" {
   sensitive = true
-  value = module.infrastructure.cert_manager_secret
+  value     = module.infrastructure.cert_manager_secret
 }
 
 output "cert_manager_settings" {
   sensitive = true
-  value = module.infrastructure.cert_manager_settings
+  value     = module.infrastructure.cert_manager_settings
 }
 
 output "cluster_name" {
@@ -32,12 +32,12 @@ output "enable_airgapped" {
 
 output "external_dns_secrets" {
   sensitive = true
-  value = module.infrastructure.external_dns_secrets
+  value     = module.infrastructure.external_dns_secrets
 }
 
 output "external_dns_settings" {
   sensitive = true
-  value = module.infrastructure.external_dns_settings
+  value     = module.infrastructure.external_dns_settings
 }
 
 output "k8s_connection" {

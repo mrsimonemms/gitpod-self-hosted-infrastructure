@@ -2,6 +2,11 @@ TF = . * infrastructure/*
 
 docs: readme-toc tf-doc
 
+azure:
+	terraform apply -var cloud=azure
+	$(MAKE) kubeconfig
+.PHONY: azure
+
 format:
 	terraform fmt -recursive .
 .PHONY: format
