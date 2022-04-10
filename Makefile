@@ -6,6 +6,14 @@ format:
 	terraform fmt -recursive .
 .PHONY: format
 
+kubeconfig:
+	mkdir -p ~/.kube
+	terraform output -json kubeconfig | jq -r > ~/.kube/config
+	chmod 600 ~/.kube/config
+
+	kubectl cluster-info
+.PHONY: kubeconfig
+
 readme-toc:
 	# Required Markdown TOC
 	# @link https://github.com/jonschlinkert/markdown-toc

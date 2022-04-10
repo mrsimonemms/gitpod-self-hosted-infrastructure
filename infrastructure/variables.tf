@@ -1,0 +1,10 @@
+variable "cloud" {}
+variable "dns_enabled" {}
+variable "enable_airgapped" {}
+variable "enable_external_database" {}
+variable "enable_external_registry" {}
+variable "enable_external_storage" {}
+variable "domain_name" {}
+variable "name_format" {}
+variable "name_format_global" {}
+variable "workspace_name" {}
