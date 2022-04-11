@@ -5,7 +5,31 @@ docs: readme-toc tf-doc
 azure:
 	terraform apply -var cloud=azure
 	$(MAKE) kubeconfig
+	$(MAKE) cert-manager
+	$(MAKE) external-dns
 .PHONY: azure
+
+cert-manager:
+	@helm upgrade \
+		--atomic \
+		--cleanup-on-fail \
+		--create-namespace \
+		--install \
+		--namespace cert-manager \
+		--repo https://charts.jetstack.io \
+		--reset-values \
+		--set installCRDs=true \
+		--set 'extraArgs={--dns01-recursive-nameservers-only=true,--dns01-recursive-nameservers=8.8.8.8:53\,1.1.1.1:53}' \
+		--wait \
+		cert-manager \
+		cert-manager
+
+	@bash ./scripts.sh cert_manager
+.PHONY: cert-manager
+
+external-dns:
+	@bash ./scripts.sh external_dns
+.PHONY: external-dns
 
 format:
 	terraform fmt -recursive .
