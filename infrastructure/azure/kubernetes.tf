@@ -62,3 +62,34 @@ resource "azurerm_kubernetes_cluster_node_pool" "pools" {
   node_labels          = local.nodes[count.index + 1].labels
   vnet_subnet_id       = azurerm_subnet.network.id
 }
+
+data "azurerm_resources" "k8s" {
+  count = var.enable_airgapped ? 1 : 0
+
+  resource_group_name = azurerm_kubernetes_cluster.k8s.node_resource_group
+  type                = "Microsoft.Network/networkSecurityGroups"
+
+  depends_on = [
+    azurerm_kubernetes_cluster.k8s,
+    azurerm_kubernetes_cluster_node_pool.pools
+  ]
+}
+
+resource "azurerm_network_security_rule" "k8s" {
+  count = length(local.network_security_rules)
+
+  resource_group_name         = azurerm_kubernetes_cluster.k8s.node_resource_group
+  network_security_group_name = data.azurerm_resources.k8s.0.resources.0.name
+
+  priority  = lookup(local.network_security_rules[count.index], "priority", sum([100, count.index]))
+  name      = local.network_security_rules[count.index].name
+  access    = local.network_security_rules[count.index].access
+  direction = local.network_security_rules[count.index].direction
+  protocol  = local.network_security_rules[count.index].protocol
+
+  description                = lookup(local.network_security_rules[count.index], "description", null)
+  source_port_range          = lookup(local.network_security_rules[count.index], "source_port_range", null)
+  destination_port_range     = lookup(local.network_security_rules[count.index], "destination_port_range", null)
+  source_address_prefix      = lookup(local.network_security_rules[count.index], "source_address_prefix", null)
+  destination_address_prefix = lookup(local.network_security_rules[count.index], "destination_address_prefix", null)
+}
