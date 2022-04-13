@@ -179,6 +179,38 @@ function image_pull_secret() {
     -o yaml | kubectl apply -f -
 }
 
+function install() {
+  cmd="kubectl kots install gitpod \\"
+  if [ $(enable_airgapped) == "true" ]; then
+    server="$(get_registry | jq -r '.server')"
+    password="$(get_registry | jq -r '.password')"
+    username="$(get_registry | jq -r '.username')"
+
+    cmd+=$(printf "\n  --airgap \\")
+    cmd+=$(printf "\n  --kotsadm-namespace "gitpod" \\")
+    cmd+=$(printf "\n  --kotsadm-registry "${server}" \\")
+    cmd+=$(printf "\n  --repo ${server} \\")
+    cmd+=$(printf "\n  --registry-username ${username} \\")
+    cmd+=$(printf "\n  --registry-password ${password}")
+
+    curl -s https://api.github.com/repos/replicatedhq/kots/releases/latest \
+      | jq '.assets[] | select(.name == "kotsadm.tar.gz")' \
+      | jq -r '.browser_download_url' \
+      | wget -i - -O tmp/kotsadm.tar.gz
+
+    kubectl kots admin-console push-images \
+      ./tmp/kotsadm.tar.gz \
+      "${server}/gitpod" \
+      --registry-username "${username}" \
+      --registry-password "${password}"
+  fi
+
+  echo "==="
+  echo "Run this command to install Gitpod via KOTS"
+  echo "==="
+  echo "${cmd}"
+}
+
 function mirror_image() {
   docker login "$(get_registry | jq -r '.server')" -u "$(get_registry | jq -r '.username')" -p "$(get_registry | jq -r '.password')"
   docker pull "${1}"
@@ -200,6 +232,9 @@ case "${cmd}" in
     ;;
   external_dns )
     external_dns
+    ;;
+  install )
+    install
     ;;
   * )
     echo "Unknown command: ${cmd}"

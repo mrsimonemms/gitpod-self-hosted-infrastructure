@@ -29,6 +29,10 @@ kubeconfig:
 	kubectl cluster-info
 .PHONY: kubeconfig
 
+install:
+	@bash ./scripts.sh install
+.PHONY: install
+
 readme-toc:
 	# Required Markdown TOC
 	# @link https://github.com/jonschlinkert/markdown-toc
