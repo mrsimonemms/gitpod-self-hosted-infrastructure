@@ -33,3 +33,4 @@ tmp
 .vscode
 .idea
 *.airgap
+infrastructure/_template/README.md
