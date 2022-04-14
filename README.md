@@ -4,6 +4,7 @@ Self-hosted infrastructure for testing
 
 <!-- toc -->
 
+- [Supported Clouds](#supported-clouds)
 - [Terraform Documentation](#terraform-documentation)
   * [Requirements](#requirements)
   * [Providers](#providers)
@@ -13,6 +14,11 @@ Self-hosted infrastructure for testing
   * [Outputs](#outputs)
 
 <!-- tocstop -->
+
+# Supported Clouds
+
+- Azure
+- Azure (airgapped)
 
 # Terraform Documentation
 
