@@ -44,6 +44,10 @@ output "kubeconfig" {
   value     = ""
 }
 
+output "proxy_settings" {
+  value = null
+}
+
 output "region" {
   value = var.location
 }

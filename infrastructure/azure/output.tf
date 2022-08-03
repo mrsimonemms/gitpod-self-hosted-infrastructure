@@ -67,6 +67,14 @@ output "kubeconfig" {
   value     = azurerm_kubernetes_cluster.k8s.kube_config_raw
 }
 
+output "proxy_settings" {
+  value = try({
+    http_proxy  = azurerm_kubernetes_cluster.k8s.http_proxy_config.0.http_proxy,
+    https_proxy = azurerm_kubernetes_cluster.k8s.http_proxy_config.0.https_proxy,
+    no_proxy    = join(",", azurerm_kubernetes_cluster.k8s.http_proxy_config.0.no_proxy),
+  }, null)
+}
+
 output "region" {
   value = var.location
 }
