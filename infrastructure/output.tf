@@ -41,6 +41,10 @@ output "kubeconfig" {
   value     = lookup(local.cloud, "kubeconfig")
 }
 
+output "proxy_settings" {
+  value = lookup(local.cloud, "proxy_settings")
+}
+
 output "region" {
   value = lookup(local.cloud, "region")
 }

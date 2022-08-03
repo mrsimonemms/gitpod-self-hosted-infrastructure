@@ -72,4 +72,5 @@ locals {
       }
     }
   ]
+  proxy_server_enabled = var.http_proxy != null || var.https_proxy != null
 }

@@ -13,6 +13,10 @@ module "azure" {
   name_format              = var.name_format
   name_format_global       = var.name_format_global
   workspace_name           = var.workspace_name
+  http_proxy               = var.http_proxy
+  https_proxy              = var.https_proxy
+  no_proxy                 = var.no_proxy
+  proxy_trusted_ca         = var.proxy_trusted_ca
 
   // Azure-specific variables
   location = var.azure_location

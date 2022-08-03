@@ -50,6 +50,10 @@ output "kubeconfig" {
   value     = module.infrastructure.kubeconfig
 }
 
+output "proxy_settings" {
+  value = module.infrastructure.proxy_settings
+}
+
 output "region" {
   value = module.infrastructure.region
 }

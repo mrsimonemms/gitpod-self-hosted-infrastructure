@@ -4,6 +4,8 @@ Self-hosted infrastructure for testing
 
 <!-- toc -->
 
+- [Guides](#guides)
+  * [Proxy Server](#proxy-server)
 - [Supported Clouds](#supported-clouds)
 - [Terraform Documentation](#terraform-documentation)
   * [Requirements](#requirements)
@@ -14,6 +16,16 @@ Self-hosted infrastructure for testing
   * [Outputs](#outputs)
 
 <!-- tocstop -->
+
+# Guides
+
+## Proxy Server
+
+A proxy server works well with an airgapped instance. The testing has been done with
+Squid. Create an Ubuntu instance that is able to be accessed by the cluster and use
+the [DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-set-up-squid-proxy-on-ubuntu-20-04) guide
+to configure it.
+
 
 # Supported Clouds
 
@@ -55,6 +67,10 @@ No resources.
 | <a name="input_enable_external_database"></a> [enable\_external\_database](#input\_enable\_external\_database) | If supported by the cloud provider, use an external database | `bool` | `true` | no |
 | <a name="input_enable_external_registry"></a> [enable\_external\_registry](#input\_enable\_external\_registry) | If supported by the cloud provider, use an external registry | `bool` | `true` | no |
 | <a name="input_enable_external_storage"></a> [enable\_external\_storage](#input\_enable\_external\_storage) | If supported by the cloud provider, use an external storage | `bool` | `true` | no |
+| <a name="input_http_proxy"></a> [http\_proxy](#input\_http\_proxy) | If supported by the cloud provider, route Kubernetes requests through an HTTP proxy | `string` | `null` | no |
+| <a name="input_https_proxy"></a> [https\_proxy](#input\_https\_proxy) | If supported by the cloud provider, route Kubernetes requests through an HTTPS proxy | `string` | `null` | no |
+| <a name="input_no_proxy"></a> [no\_proxy](#input\_no\_proxy) | If supported by the cloud provider, ignore these URLs for proxying | `set(string)` | `[]` | no |
+| <a name="input_proxy_trusted_ca"></a> [proxy\_trusted\_ca](#input\_proxy\_trusted\_ca) | If supported by the cloud provider, the proxy's trusted certificate authority | `string` | `null` | no |
 
 ## Outputs
 
@@ -71,6 +87,7 @@ No resources.
 | <a name="output_external_dns_settings"></a> [external\_dns\_settings](#output\_external\_dns\_settings) | n/a |
 | <a name="output_k8s_connection"></a> [k8s\_connection](#output\_k8s\_connection) | n/a |
 | <a name="output_kubeconfig"></a> [kubeconfig](#output\_kubeconfig) | n/a |
+| <a name="output_proxy_settings"></a> [proxy\_settings](#output\_proxy\_settings) | n/a |
 | <a name="output_region"></a> [region](#output\_region) | n/a |
 | <a name="output_registry"></a> [registry](#output\_registry) | n/a |
 | <a name="output_storage"></a> [storage](#output\_storage) | n/a |
