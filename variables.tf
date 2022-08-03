@@ -38,3 +38,27 @@ variable "enable_external_storage" {
   description = "If supported by the cloud provider, use an external storage"
   type        = bool
 }
+
+variable "http_proxy" {
+  default     = null
+  description = "If supported by the cloud provider, route Kubernetes requests through an HTTP proxy"
+  type        = string
+}
+
+variable "https_proxy" {
+  default     = null
+  description = "If supported by the cloud provider, route Kubernetes requests through an HTTPS proxy"
+  type        = string
+}
+
+variable "no_proxy" {
+  default     = []
+  description = "If supported by the cloud provider, ignore these URLs for proxying"
+  type        = set(string)
+}
+
+variable "proxy_trusted_ca" {
+  default     = null
+  description = "If supported by the cloud provider, the proxy's trusted certificate authority"
+  type        = string
+}

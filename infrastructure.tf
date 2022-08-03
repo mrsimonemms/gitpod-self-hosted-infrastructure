@@ -12,6 +12,10 @@ module "infrastructure" {
   name_format              = local.name_format
   name_format_global       = local.name_format_global
   workspace_name           = terraform.workspace
+  http_proxy               = var.http_proxy
+  https_proxy              = var.https_proxy
+  no_proxy                 = var.no_proxy
+  proxy_trusted_ca         = var.proxy_trusted_ca
 
   // Cloud-specific variables
   azure_location = var.azure_location

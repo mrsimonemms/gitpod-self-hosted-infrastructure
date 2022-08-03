@@ -38,6 +38,27 @@ resource "azurerm_kubernetes_cluster" "k8s" {
     type = "SystemAssigned"
   }
 
+  # @link https://docs.microsoft.com/en-us/azure/aks/http-proxy#configuring-an-http-proxy-using-azure-cli
+  dynamic "http_proxy_config" {
+    for_each = local.proxy_server_enabled ? [""] : []
+    content {
+      http_proxy  = var.http_proxy  # This should be in format "http://address:port/"
+      https_proxy = var.https_proxy # This should be in format "https://address:port/"
+      no_proxy = setunion(
+        # Ignore any local network addresses
+        [
+          "localhost",
+          "127.0.0.1",
+          "10.0.0.0/8",
+          "192.168.0.0/16",
+          ".cluster.local",
+        ],
+        var.no_proxy
+      )
+      trusted_ca = var.proxy_trusted_ca # This should be in base64 format
+    }
+  }
+
   network_profile {
     network_plugin = "kubenet"
     network_policy = "calico"
@@ -45,6 +66,12 @@ resource "azurerm_kubernetes_cluster" "k8s" {
 
   oms_agent {
     log_analytics_workspace_id = azurerm_log_analytics_workspace.monitoring.id
+  }
+
+  lifecycle {
+    ignore_changes = [
+      http_proxy_config.0.no_proxy
+    ]
   }
 }
 

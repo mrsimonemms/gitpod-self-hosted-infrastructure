@@ -47,8 +47,12 @@ No resources.
 | <a name="input_enable_external_database"></a> [enable\_external\_database](#input\_enable\_external\_database) | n/a | `any` | n/a | yes |
 | <a name="input_enable_external_registry"></a> [enable\_external\_registry](#input\_enable\_external\_registry) | n/a | `any` | n/a | yes |
 | <a name="input_enable_external_storage"></a> [enable\_external\_storage](#input\_enable\_external\_storage) | n/a | `any` | n/a | yes |
+| <a name="input_http_proxy"></a> [http\_proxy](#input\_http\_proxy) | n/a | `any` | n/a | yes |
+| <a name="input_https_proxy"></a> [https\_proxy](#input\_https\_proxy) | n/a | `any` | n/a | yes |
 | <a name="input_name_format"></a> [name\_format](#input\_name\_format) | n/a | `any` | n/a | yes |
 | <a name="input_name_format_global"></a> [name\_format\_global](#input\_name\_format\_global) | n/a | `any` | n/a | yes |
+| <a name="input_no_proxy"></a> [no\_proxy](#input\_no\_proxy) | n/a | `any` | n/a | yes |
+| <a name="input_proxy_trusted_ca"></a> [proxy\_trusted\_ca](#input\_proxy\_trusted\_ca) | n/a | `any` | n/a | yes |
 | <a name="input_workspace_name"></a> [workspace\_name](#input\_workspace\_name) | n/a | `any` | n/a | yes |
 
 ## Outputs
@@ -65,6 +69,7 @@ No resources.
 | <a name="output_external_dns_settings"></a> [external\_dns\_settings](#output\_external\_dns\_settings) | n/a |
 | <a name="output_k8s_connection"></a> [k8s\_connection](#output\_k8s\_connection) | n/a |
 | <a name="output_kubeconfig"></a> [kubeconfig](#output\_kubeconfig) | n/a |
+| <a name="output_proxy_settings"></a> [proxy\_settings](#output\_proxy\_settings) | n/a |
 | <a name="output_region"></a> [region](#output\_region) | n/a |
 | <a name="output_registry"></a> [registry](#output\_registry) | n/a |
 | <a name="output_storage"></a> [storage](#output\_storage) | n/a |

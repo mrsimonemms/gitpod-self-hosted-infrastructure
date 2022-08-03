@@ -8,3 +8,7 @@ variable "domain_name" {}
 variable "name_format" {}
 variable "name_format_global" {}
 variable "workspace_name" {}
+variable "http_proxy" {}
+variable "https_proxy" {}
+variable "no_proxy" {}
+variable "proxy_trusted_ca" {}
