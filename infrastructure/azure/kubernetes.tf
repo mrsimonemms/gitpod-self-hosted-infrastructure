@@ -63,6 +63,17 @@ resource "azurerm_kubernetes_cluster_node_pool" "pools" {
   vnet_subnet_id       = azurerm_subnet.network.id
 }
 
+resource "time_sleep" "wait_2_mins" {
+  count = var.enable_airgapped ? 1 : 0
+
+  create_duration = "2m"
+
+  depends_on = [
+    azurerm_kubernetes_cluster.k8s,
+    azurerm_kubernetes_cluster_node_pool.pools
+  ]
+}
+
 data "azurerm_resources" "k8s" {
   count = var.enable_airgapped ? 1 : 0
 
@@ -70,8 +81,7 @@ data "azurerm_resources" "k8s" {
   type                = "Microsoft.Network/networkSecurityGroups"
 
   depends_on = [
-    azurerm_kubernetes_cluster.k8s,
-    azurerm_kubernetes_cluster_node_pool.pools
+    time_sleep.wait_2_mins
   ]
 }
 
