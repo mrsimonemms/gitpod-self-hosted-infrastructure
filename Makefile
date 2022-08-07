@@ -21,6 +21,13 @@ format:
 	terraform fmt -recursive .
 .PHONY: format
 
+hetzner:
+	terraform apply -var cloud=hetzner
+	$(MAKE) kubeconfig
+	$(MAKE) cert-manager
+	$(MAKE) external-dns
+.PHONY: hetzner
+
 kubeconfig:
 	mkdir -p ~/.kube
 	terraform output -json kubeconfig | jq -r > ~/.kube/config
