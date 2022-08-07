@@ -41,6 +41,14 @@ output "kubeconfig" {
   value     = lookup(local.cloud, "kubeconfig")
 }
 
+output "load_balancer_address" {
+  value = try(lookup(local.cloud, "load_balancer_address"), null)
+}
+
+output "node_list" {
+  value = try(lookup(local.cloud, "node_list"), [])
+}
+
 output "proxy_settings" {
   value = lookup(local.cloud, "proxy_settings")
 }

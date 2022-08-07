@@ -30,6 +30,7 @@ No providers.
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_azure"></a> [azure](#module\_azure) | ./azure | n/a |
+| <a name="module_hetzner"></a> [hetzner](#module\_hetzner) | ./hetzner | n/a |
 
 ## Resources
 
@@ -47,6 +48,7 @@ No resources.
 | <a name="input_enable_external_database"></a> [enable\_external\_database](#input\_enable\_external\_database) | n/a | `any` | n/a | yes |
 | <a name="input_enable_external_registry"></a> [enable\_external\_registry](#input\_enable\_external\_registry) | n/a | `any` | n/a | yes |
 | <a name="input_enable_external_storage"></a> [enable\_external\_storage](#input\_enable\_external\_storage) | n/a | `any` | n/a | yes |
+| <a name="input_hetzner_location"></a> [hetzner\_location](#input\_hetzner\_location) | Any hetzner-specific variables should be specified here Prefix any variables with "<hetzner>\_" to avoid collisions | `any` | n/a | yes |
 | <a name="input_http_proxy"></a> [http\_proxy](#input\_http\_proxy) | n/a | `any` | n/a | yes |
 | <a name="input_https_proxy"></a> [https\_proxy](#input\_https\_proxy) | n/a | `any` | n/a | yes |
 | <a name="input_name_format"></a> [name\_format](#input\_name\_format) | n/a | `any` | n/a | yes |
@@ -69,6 +71,8 @@ No resources.
 | <a name="output_external_dns_settings"></a> [external\_dns\_settings](#output\_external\_dns\_settings) | n/a |
 | <a name="output_k8s_connection"></a> [k8s\_connection](#output\_k8s\_connection) | n/a |
 | <a name="output_kubeconfig"></a> [kubeconfig](#output\_kubeconfig) | n/a |
+| <a name="output_load_balancer_address"></a> [load\_balancer\_address](#output\_load\_balancer\_address) | n/a |
+| <a name="output_node_list"></a> [node\_list](#output\_node\_list) | n/a |
 | <a name="output_proxy_settings"></a> [proxy\_settings](#output\_proxy\_settings) | n/a |
 | <a name="output_region"></a> [region](#output\_region) | n/a |
 | <a name="output_registry"></a> [registry](#output\_registry) | n/a |

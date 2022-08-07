@@ -7,12 +7,12 @@ output "cert_manager_secret" {
 }
 
 output "cluster_name" {
-  value = ""
+  value = "hetzner-k3s"
 }
 
 output "database" {
   sensitive = true
-  value     = try({}, {})
+  value     = {}
 }
 
 output "domain_nameservers" {
@@ -29,19 +29,24 @@ output "external_dns_settings" {
 
 output "k8s_connection" {
   sensitive = true
-  value = {
-    host                   = ""
-    username               = ""
-    password               = ""
-    client_certificate     = base64decode("")
-    client_key             = base64decode("")
-    cluster_ca_certificate = base64decode("")
-  }
+  value     = {}
 }
 
 output "kubeconfig" {
   sensitive = true
-  value     = ""
+  value     = null
+}
+
+output "load_balancer_address" {
+  value = local.nodes == 1 ? hcloud_server.node.0.ipv4_address : hcloud_load_balancer.load_balancer.0.ipv4
+}
+
+output "node_list" {
+  value = [for k, v in hcloud_server.node[*] : {
+    ssh_address : v.ipv4_address,
+    k3s_address : v.ipv4_address,
+    user : "root"
+  }]
 }
 
 output "proxy_settings" {
@@ -54,11 +59,7 @@ output "region" {
 
 output "registry" {
   sensitive = true
-  value = try({
-    server   = ""
-    password = ""
-    username = ""
-  }, {})
+  value     = {}
 }
 
 output "storage" {

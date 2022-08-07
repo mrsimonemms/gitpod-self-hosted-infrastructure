@@ -58,8 +58,6 @@ function cert_manager() {
   fi
   cmd+=" cert-manager cert-manager"
 
-  eval $cmd
-
   eval "${cmd}"
 
   get_output cert_manager_secret > tmp/secret
@@ -89,7 +87,28 @@ spec:
     solvers: []
 EOF
 
-  yq e -i ".spec.acme.solvers = $(terraform output -json cert_manager_issuer)" tmp/issuer.yaml
+  cloudflare="$(terraform output -json cloudflare_solver || true)"
+
+  if [ -n "${cloudflare}" ]; then
+    echo "Using Cloudflare as the solver"
+
+    secretName="cloudflare-api-token"
+    keyName="api-token"
+
+    yq -e -i ".spec.acme.solvers.0.dns01.cloudflare.email = \"$(echo $cloudflare | yq e '.email' -)\"" tmp/issuer.yaml
+    yq -e -i ".spec.acme.solvers.0.dns01.cloudflare.apiTokenSecretRef.name = \"${secretName}\"" tmp/issuer.yaml
+    yq -e -i ".spec.acme.solvers.0.dns01.cloudflare.apiTokenSecretRef.key = \"${keyName}\"" tmp/issuer.yaml
+
+    kubectl create secret generic "${secretName}" \
+      -n cert-manager \
+      --from-literal="${keyName}"="$(echo $cloudflare | yq e '.token' -)" \
+      --dry-run=client -o yaml | \
+      kubectl replace --force -f -
+  else
+    echo "Using Terraform output"
+
+    yq e -i ".spec.acme.solvers = $(terraform output -json cert_manager_issuer)" tmp/issuer.yaml
+  fi
 
   kubectl apply -f tmp/issuer.yaml
 }
@@ -166,6 +185,69 @@ function get_registry() {
   fi
 
   cat tmp/registry.json
+}
+
+function k3s() {
+  echo "Install k3s to cluster"
+
+  mkdir -p "${HOME}/.kube"
+
+  node_list="$(terraform output -json | jq -r '.node_list.value')"
+
+  SERVER_IP=
+  JOIN_NODE=0
+  for row in $(echo $node_list | jq -r '.[] | @base64'); do
+    _jq() {
+      echo "${row}" | base64 --decode | jq -r "${1}"
+    }
+
+    SSH_ADDRESS="$(_jq '.ssh_address')" # This is used to SSH to the node
+    K3S_ADDRESS="$(_jq '.k3s_address')" # This is used to connect to the serve
+    USER="$(_jq '.user')"
+
+    ssh-keyscan "${SSH_ADDRESS}" >> ~/.ssh/known_hosts
+
+#     # Allow for use of self-signed registries
+#     cat << EOF > ./registries.yaml
+# configs:
+#   "reg.${DOMAIN}:20000":
+#     tls:
+#       insecure_skip_verify: true
+# EOF
+#     scp ./registries.yaml "${USER}@${SSH_ADDRESS}:/tmp/registries.yaml"
+#     ssh "${USER}@${SSH_ADDRESS}" "sudo mkdir -p /etc/rancher/k3s"
+#     ssh "${USER}@${SSH_ADDRESS}" "sudo mv /tmp/registries.yaml /etc/rancher/k3s/registries.yaml"
+
+    if [ "${JOIN_NODE}" -eq 0 ]; then
+      echo "Installing k3s to node ${SSH_ADDRESS}"
+
+      k3sup install \
+        --cluster \
+        --ip "${SSH_ADDRESS}" \
+        --local-path "${HOME}/.kube/config" \
+        --k3s-extra-args="--disable traefik --node-label=gitpod.io/workload_meta=true --node-label=gitpod.io/workload_ide=true --node-label=gitpod.io/workload_workspace_services=true --node-label=gitpod.io/workload_workspace_regular=true --node-label=gitpod.io/workload_workspace_headless=true" \
+        --user "${USER}"
+
+      # Set any future nodes to join this node
+      JOIN_NODE=1
+      SERVER_IP="${K3S_ADDRESS}"
+    else
+      echo "Joining node ${K3S_ADDRESS} to ${SERVER_IP}"
+
+      k3sup join \
+        --ip "${SSH_ADDRESS}" \
+        --k3s-extra-args="--disable traefik --node-label=gitpod.io/workload_meta=true --node-label=gitpod.io/workload_ide=true --node-label=gitpod.io/workload_workspace_services=true --node-label=gitpod.io/workload_workspace_regular=true --node-label=gitpod.io/workload_workspace_headless=true" \
+        --server \
+        --server-ip "${SERVER_IP}" \
+        --server-user "${USER}" \
+        --user "${USER}"
+    fi
+
+    echo "Install linux-headers"
+    ssh "${USER}@${SSH_ADDRESS}" "sudo apt-get update"
+    # shellcheck disable=SC2029
+    ssh "${USER}@${SSH_ADDRESS}" 'sudo apt-get install -y linux-headers-$(uname -r) linux-headers-generic'
+  done
 }
 
 function image_pull_secret() {
@@ -258,6 +340,9 @@ case "${cmd}" in
     ;;
   external_dns )
     external_dns
+    ;;
+  k3s )
+    k3s
     ;;
   install )
     install
