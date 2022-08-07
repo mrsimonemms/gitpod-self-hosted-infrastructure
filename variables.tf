@@ -4,9 +4,19 @@ variable "cloud" {
   validation {
     condition = contains([
       "azure",
+      "hetzner",
     ], var.cloud)
     error_message = "Cloud provider unsupported."
   }
+}
+
+variable "cloudflare_solver" {
+  default = null
+  type = object({
+    email : string
+    token : string
+  })
+  description = "The CloudFlare solver settings."
 }
 
 variable "domain_name" {

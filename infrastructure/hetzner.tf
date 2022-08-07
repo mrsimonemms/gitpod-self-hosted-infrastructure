@@ -22,7 +22,9 @@ module "hetzner" {
   proxy_trusted_ca         = var.proxy_trusted_ca
 
   // Hetzner-specific variables
+  location = var.hetzner_location
 }
 
 // Any hetzner-specific variables should be specified here
 // Prefix any variables with "<hetzner>_" to avoid collisions
+variable "hetzner_location" {}

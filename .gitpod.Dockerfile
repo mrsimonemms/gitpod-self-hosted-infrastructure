@@ -16,3 +16,8 @@ RUN curl https://kots.io/install | bash \
   && echo 'source <(kubectl kots completion bash)' >> /home/gitpod/.bashrc
 # Azure
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+# K3sup
+RUN curl -sLS https://get.k3sup.dev | sh \
+  && sudo install k3sup /usr/local/bin/ \
+  && rm -f k3sup \
+  && k3sup version

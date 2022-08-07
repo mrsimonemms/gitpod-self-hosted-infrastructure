@@ -17,6 +17,11 @@ output "cluster_name" {
   value = module.infrastructure.cluster_name
 }
 
+output "cloudflare_solver" {
+  sensitive = true
+  value     = var.cloudflare_solver
+}
+
 output "database" {
   sensitive = true
   value     = module.infrastructure.database
@@ -48,6 +53,14 @@ output "k8s_connection" {
 output "kubeconfig" {
   sensitive = true
   value     = module.infrastructure.kubeconfig
+}
+
+output "load_balancer_address" {
+  value = module.infrastructure.load_balancer_address
+}
+
+output "node_list" {
+  value = module.infrastructure.node_list
 }
 
 output "proxy_settings" {

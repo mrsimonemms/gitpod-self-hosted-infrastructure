@@ -15,3 +15,14 @@ variable "no_proxy" {}
 variable "proxy_trusted_ca" {}
 
 // Hetzner-specific variables
+variable "location" {
+  validation {
+    condition = contains([
+      "nbg1",
+      "fsn1",
+      "hel1",
+      "ash",
+    ], var.location)
+    error_message = "Location unsupported."
+  }
+}

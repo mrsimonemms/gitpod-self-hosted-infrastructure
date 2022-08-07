@@ -23,10 +23,13 @@ format:
 
 hetzner:
 	terraform apply -var cloud=hetzner
-	$(MAKE) kubeconfig
+	$(MAKE) k3s
 	$(MAKE) cert-manager
-	$(MAKE) external-dns
 .PHONY: hetzner
+
+k3s:
+	@bash ./scripts.sh k3s
+.PHONY: k3s
 
 kubeconfig:
 	mkdir -p ~/.kube
