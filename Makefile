@@ -33,6 +33,10 @@ install:
 	@bash ./scripts.sh install
 .PHONY: install
 
+new-provider:
+	@bash ./scripts.sh new_provider
+.PHONY: new-provider
+
 readme-toc:
 	# Required Markdown TOC
 	# @link https://github.com/jonschlinkert/markdown-toc

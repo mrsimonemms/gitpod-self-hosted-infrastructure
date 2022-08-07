@@ -1,7 +1,4 @@
 // Provider
-//
-// Replace any use of the word "provider" with the name
-// of the cloud provider - eg, "provider" becomes "azure"
 
 module "provider" {
   source = "./provider"

@@ -218,6 +218,32 @@ function mirror_image() {
   docker push "${2}"
 }
 
+function new_provider() {
+  if [ -z ${PROVIDER+x} ]; then
+    echo "No PROVIDER set"
+    exit 1
+  fi
+  echo "Creating new provider for ${PROVIDER}"
+
+  cp -rf ./infrastructure/_template/* ./tmp
+
+  for f in $(find ./tmp/*); do
+    lowerProvider="$(echo "${PROVIDER}" | tr '[:upper:]' '[:lower:]')"
+    capProvider="${lowerProvider^}"
+
+    sed -i -e "s/provider/${lowerProvider}/g" "${f}" || true
+    sed -i -e "s/Provider/${capProvider}/g" "${f}" || true
+  done
+
+  for f in $(find ./tmp -name '*provider*'); do
+    mv "${f}" "$(echo "${f}" | sed s/provider/${PROVIDER}/)" || true
+  done
+
+  cp -Rf ./tmp/* ./
+
+  echo "Done"
+}
+
 ############
 # Commands #
 ############
@@ -235,6 +261,9 @@ case "${cmd}" in
     ;;
   install )
     install
+    ;;
+  new_provider )
+    new_provider
     ;;
   * )
     echo "Unknown command: ${cmd}"
