@@ -31,6 +31,8 @@ to configure it.
 
 - Azure
 - Azure (airgapped)
+- Azure (proxy)
+- Hetzner
 
 # Terraform Documentation
 
