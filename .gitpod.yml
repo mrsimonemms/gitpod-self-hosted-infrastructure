@@ -4,6 +4,7 @@ image:
 tasks:
   - name: Install Terraform
     command: |
+      touch .auto.tfvars
       terraform init
 vscode:
   extensions:
