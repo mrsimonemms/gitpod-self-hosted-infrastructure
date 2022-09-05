@@ -13,3 +13,21 @@ resource "hcloud_network_subnet" "network-subnet" {
   network_zone = local.network_location[var.location]
   ip_range     = "10.2.0.0/24"
 }
+
+resource "hcloud_firewall" "firewall" {
+  name = format(var.name_format, local.location, "firewall")
+
+  dynamic "rule" {
+    for_each = toset(local.firewall)
+    content {
+      description = rule.value.description
+      port        = rule.value.port
+      direction   = try(rule.value.direction, "in")
+      protocol    = try(rule.value.protocol, "tcp")
+      source_ips = try(rule.value.source_ips, [
+        "0.0.0.0/0",
+        "::/0"
+      ])
+    }
+  }
+}

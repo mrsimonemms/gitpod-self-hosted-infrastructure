@@ -24,6 +24,10 @@ resource "hcloud_server" "node" {
   server_type = local.machine
   location    = var.location
 
+  firewall_ids = [
+    hcloud_firewall.firewall.id
+  ]
+
   network {
     network_id = hcloud_network.network.id
   }
