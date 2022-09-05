@@ -20,5 +20,8 @@ module "infrastructure" {
   // Cloud-specific variables
   azure_location = var.azure_location
 
+  google_project_id = var.google_project_id
+  google_region     = var.google_region
+
   hetzner_location = var.hetzner_location
 }

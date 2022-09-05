@@ -1,5 +1,5 @@
 locals {
-  cloud = var.cloud == "azure" ? module.azure[0] : (var.cloud == "hetzner" ? module.hetzner[0] : null)
+  cloud = var.cloud == "azure" ? module.azure[0] : (var.cloud == "hetzner" ? module.hetzner[0] : (var.cloud == "gcp" ? module.gcp[0] : null))
   labels = tomap({
     workload_meta : "gitpod.io/workload_meta"
     workload_ide : "gitpod.io/workload_ide"

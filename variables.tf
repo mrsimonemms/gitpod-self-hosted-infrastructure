@@ -4,6 +4,7 @@ variable "cloud" {
   validation {
     condition = contains([
       "azure",
+      "gcp",
       "hetzner",
     ], var.cloud)
     error_message = "Cloud provider unsupported."

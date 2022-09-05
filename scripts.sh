@@ -68,8 +68,8 @@ function cert_manager() {
     cmd="kubectl create secret generic dns --namespace ${CERT_MANAGER_NAMESPACE}"
     while IFS= read -r line; do
       cmd+=" --from-literal ${line}"
-    done <<< $(cat tmp/secret | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]')
-    cmd+=" --dry-run=client -o yaml | kubectl replace -f -"
+    done <<< $(cat tmp/secret | jq 'to_entries|map("\(.key)=\(.value|tostring)")|.[]')
+    cmd+=" --dry-run=client -o yaml | kubectl replace --force -f -"
 
     eval ${cmd}
   fi
@@ -141,13 +141,18 @@ function external_dns() {
 
   if [ $(jq length tmp/secret) -gt "0" ]; then
     while IFS= read -r line; do
-      cat tmp/secret | jq -r --arg KEY "${line}" '.[$KEY]|to_entries|map("\(.key)=\(.value|tostring)")|.[]' > tmp/secret-values
+      cat tmp/secret | jq -r --arg KEY "${line}" '.[$KEY]|to_entries|.[]|@base64' > tmp/secret-values
 
-      kubectl create secret generic "${line}" \
-        -n external-dns \
-        --from-env-file tmp/secret-values \
-        --dry-run=client \
-        -o yaml | kubectl apply -f -
+      cmd="kubectl create secret generic ${line} -n external-dns --dry-run=client -o yaml"
+      for row in $(cat tmp/secret-values); do
+        key=$(echo ${row} | base64 -d | jq -r '.key')
+        value=$(echo ${row} | base64 -d | jq -r '.value')
+
+        cmd+=" --from-literal=${key}='${value}'"
+      done
+      cmd+="  | kubectl replace --force -f -"
+
+      eval ${cmd}
     done <<< $(cat tmp/secret | jq -r 'keys[]')
   fi
 

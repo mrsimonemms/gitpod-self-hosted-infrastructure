@@ -21,6 +21,13 @@ format:
 	terraform fmt -recursive .
 .PHONY: format
 
+gcp:
+	terraform apply -var cloud=gcp
+	$(MAKE) kubeconfig
+	$(MAKE) cert-manager
+	$(MAKE) external-dns
+.PHONY: gcp
+
 hetzner:
 	terraform apply -var cloud=hetzner
 	$(MAKE) k3s
