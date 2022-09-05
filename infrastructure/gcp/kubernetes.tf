@@ -98,3 +98,16 @@ module "gke_auth" {
   location     = google_container_cluster.primary.location
   cluster_name = google_container_cluster.primary.name
 }
+
+resource "google_compute_firewall" "k8s" {
+  count = var.enable_airgapped ? 1 : 0
+
+  name    = "airgapped-network"
+  network = google_compute_network.container_network.self_link
+
+  direction = "EGRESS"
+
+  deny {
+    protocol = "tcp"
+  }
+}
