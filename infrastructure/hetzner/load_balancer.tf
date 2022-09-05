@@ -27,10 +27,6 @@ resource "hcloud_load_balancer_service" "http" {
   load_balancer_id = hcloud_load_balancer.load_balancer.0.id
   protocol         = "http"
   listen_port      = 80
-
-  http {
-    redirect_http = true
-  }
 }
 
 resource "hcloud_load_balancer_service" "https" {
