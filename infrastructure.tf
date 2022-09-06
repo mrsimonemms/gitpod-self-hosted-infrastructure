@@ -19,6 +19,7 @@ module "infrastructure" {
 
   // Cloud-specific variables
   azure_location = var.azure_location
+  azure_k3s      = var.azure_k3s
 
   hetzner_location = var.hetzner_location
 }

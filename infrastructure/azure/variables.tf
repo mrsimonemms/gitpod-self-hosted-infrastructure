@@ -16,3 +16,4 @@ variable "proxy_trusted_ca" {}
 
 // Azure-specific variables
 variable "location" {}
+variable "use_k3s" {}

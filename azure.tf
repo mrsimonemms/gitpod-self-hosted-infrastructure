@@ -11,3 +11,9 @@ variable "azure_location" {
   default     = "northeurope"
   description = "Region to use"
 }
+
+variable "azure_k3s" {
+  type        = bool
+  default     = false
+  description = "Use k3s instead of AKS"
+}

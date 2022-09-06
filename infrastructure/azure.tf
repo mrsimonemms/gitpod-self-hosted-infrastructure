@@ -20,6 +20,8 @@ module "azure" {
 
   // Azure-specific variables
   location = var.azure_location
+  use_k3s  = var.azure_k3s
 }
 
 variable "azure_location" {}
+variable "azure_k3s" {}
