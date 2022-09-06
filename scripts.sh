@@ -207,6 +207,35 @@ function k3s() {
 
     ssh-keyscan "${SSH_ADDRESS}" >> ~/.ssh/known_hosts
 
+    # Remove old proxy settings
+    ssh "${USER}@${SSH_ADDRESS}" "sudo sed -i '/http_proxy=/d' /etc/environment"
+    ssh "${USER}@${SSH_ADDRESS}" "sudo sed -i '/HTTP_PROXY=/d' /etc/environment"
+    ssh "${USER}@${SSH_ADDRESS}" "sudo sed -i '/https_proxy=/d' /etc/environment"
+    ssh "${USER}@${SSH_ADDRESS}" "sudo sed -i '/HTTPS_PROXY=/d' /etc/environment"
+    ssh "${USER}@${SSH_ADDRESS}" "sudo sed -i '/NO_PROXY=/d' /etc/environment"
+
+    # Add new proxy settings
+    http_proxy="$(terraform output -json proxy_settings | jq -r '.http_proxy')"
+    if [ "${http_proxy}" != "null" ]; then
+      ssh "${USER}@${SSH_ADDRESS}" "echo 'http_proxy=\"${http_proxy}\"' | sudo tee -a /etc/environment > /dev/null"
+      ssh "${USER}@${SSH_ADDRESS}" "echo 'HTTP_PROXY=\"${http_proxy}\"' | sudo tee -a /etc/environment > /dev/null"
+    fi
+
+    https_proxy="$(terraform output -json proxy_settings | jq -r '.https_proxy')"
+    if [ "${https_proxy}" != "null" ]; then
+      ssh "${USER}@${SSH_ADDRESS}" "echo 'https_proxy=\"${https_proxy}\"' | sudo tee -a /etc/environment > /dev/null"
+      ssh "${USER}@${SSH_ADDRESS}" "echo 'HTTPS_PROXY=\"${https_proxy}\"' | sudo tee -a /etc/environment > /dev/null"
+    elif [ "${http_proxy}" != "null" ]; then
+      ssh "${USER}@${SSH_ADDRESS}" "echo 'https_proxy=\"${http_proxy}\"' | sudo tee -a /etc/environment > /dev/null"
+      ssh "${USER}@${SSH_ADDRESS}" "echo 'HTTPS_PROXY=\"${http_proxy}\"' | sudo tee -a /etc/environment > /dev/null"
+    fi
+
+    no_proxy="$(terraform output -json proxy_settings | jq -r '.no_proxy')"
+    if [ "${no_proxy}" != "null" ]; then
+      ssh "${USER}@${SSH_ADDRESS}" "echo 'no_proxy=\"${no_proxy}\"' | sudo tee -a /etc/environment > /dev/null"
+      ssh "${USER}@${SSH_ADDRESS}" "echo 'NO_PROXY=\"${no_proxy}\"' | sudo tee -a /etc/environment > /dev/null"
+    fi
+
 #     # Allow for use of self-signed registries
 #     cat << EOF > ./registries.yaml
 # configs:

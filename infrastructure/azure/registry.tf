@@ -16,9 +16,9 @@ resource "azurerm_container_registry" "registry" {
 }
 
 resource "azurerm_role_assignment" "registry" {
-  count = var.enable_external_registry ? 1 : 0
+  count = var.enable_external_registry && !var.use_k3s ? 1 : 0
 
-  principal_id                     = azurerm_kubernetes_cluster.k8s.kubelet_identity[0].object_id
+  principal_id                     = azurerm_kubernetes_cluster.k8s[count.index].kubelet_identity[0].object_id
   role_definition_name             = "AcrPush"
   scope                            = azurerm_container_registry.registry[count.index].id
   skip_service_principal_aad_check = true

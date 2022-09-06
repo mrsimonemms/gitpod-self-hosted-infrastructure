@@ -9,6 +9,12 @@ azure:
 	$(MAKE) external-dns
 .PHONY: azure
 
+azure-k3s:
+	terraform apply -var cloud=azure -var azure_k3s=true
+	$(MAKE) k3s
+	$(MAKE) cert-manager
+.PHONY: azure-k3s
+
 cert-manager:
 	@bash ./scripts.sh cert_manager
 .PHONY: cert-manager

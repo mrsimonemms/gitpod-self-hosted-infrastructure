@@ -18,3 +18,13 @@ resource "azurerm_dns_zone" "dns" {
   name                = var.domain_name
   resource_group_name = azurerm_resource_group.gitpod.name
 }
+
+resource "azurerm_dns_a_record" "k3s" {
+  count = var.dns_enabled && var.use_k3s ? length(local.dns_records) : 0
+
+  name                = local.dns_records[count.index]
+  zone_name           = azurerm_dns_zone.dns.0.name
+  resource_group_name = azurerm_resource_group.gitpod.name
+  ttl                 = 120
+  target_resource_id  = azurerm_public_ip.k3s.0.id
+}
