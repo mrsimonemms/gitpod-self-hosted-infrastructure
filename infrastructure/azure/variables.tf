@@ -9,8 +9,18 @@ variable "labels" {}
 variable "name_format" {}
 variable "name_format_global" {}
 variable "workspace_name" {}
-variable "http_proxy" {}
-variable "https_proxy" {}
+variable "http_proxy" {
+  validation {
+    condition = var.http_proxy == null ? true : substr(var.http_proxy, -1, 1) == "/"
+    error_message = "The http_proxy variable must end with \"/\" if set."
+  }
+}
+variable "https_proxy" {
+  validation {
+    condition = var.https_proxy == null ? true : substr(var.https_proxy, -1, 1) == "/"
+    error_message = "The https_proxy variable must end with \"/\" if set."
+  }
+}
 variable "no_proxy" {}
 variable "proxy_trusted_ca" {}
 

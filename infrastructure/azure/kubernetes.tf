@@ -53,10 +53,15 @@ resource "azurerm_kubernetes_cluster" "k8s" {
         [
           "localhost",
           "127.0.0.1",
+          "0.0.0.0",
           "10.0.0.0/8",
           "192.168.0.0/16",
+          ".svc",
           ".cluster.local",
+          var.domain_name
         ],
+        azurerm_virtual_network.network.address_space,
+        azurerm_subnet.network.address_prefixes,
         var.no_proxy
       )
       trusted_ca = var.proxy_trusted_ca # This should be in base64 format
