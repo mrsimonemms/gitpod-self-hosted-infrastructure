@@ -3,6 +3,8 @@ image:
 
 tasks:
   - name: Install Terraform
+    init: |
+      terraform -install-autocomplete
     command: |
       touch .auto.tfvars
       terraform init
